@@ -14,17 +14,51 @@ configurations {
 	}
 }
 
+compileJava {
+	options.compilerArgs << '-parameters'
+}
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.6'
+
+	runtimeOnly 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
+	
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+task generateSeats() {
+	doLast {
+		File dataSql = file("src/main/resources/data.sql")
+		dataSql.write("")
+
+		int no_rooms = 3
+		int[] no_seats = new int[no_rooms]
+		no_seats[0] = 150
+		no_seats[1] = 130
+		no_seats[2] = 135
+		int counter = 1;
+
+		for (int i = 0; i < no_rooms; i++) {
+			for (int j = 0; j < no_seats[i]; j++) {
+				int row_num = (int) Math.floor(j / 10) + 1
+				int seat_num = (int) j % 10 + 1
+				dataSql.append("INSERT INTO Seat(id, row_num, number, id_room) " +
+						"VALUES (${counter}, ${row_num}, ${seat_num}, ${i + 1});\n")
+				counter++
+			}
+		}
+	}
 }
