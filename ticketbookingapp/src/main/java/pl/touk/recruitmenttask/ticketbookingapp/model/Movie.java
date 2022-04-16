@@ -1,5 +1,6 @@
 package pl.touk.recruitmenttask.ticketbookingapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +15,12 @@ public class Movie {
     @Id
     private int id;
     private String title;
-    @Column(name = "duration_time_min")
     private int durationTime;
 
-    @OneToMany
-    @JoinColumn(name = "id_movie")
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "movie"
+    )
+    @JsonManagedReference
     private List<Screening> screening;
 }

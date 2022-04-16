@@ -1,5 +1,7 @@
 package pl.touk.recruitmenttask.ticketbookingapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +19,27 @@ public class Screening {
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @OneToMany
-    @JoinColumn(name = "id_screening")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_movie")
+    @JsonBackReference
+    private Movie movie;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_room")
+    @JsonBackReference
+    private Room room;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "screening"
+    )
+    @JsonManagedReference
     private List<Reservation> reservation;
 
-    @OneToMany
-    @JoinColumn(name = "id_screening")
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "screening"
+    )
+    @JsonManagedReference
     private List<ReservedSeat> reservedSeat;
 }
