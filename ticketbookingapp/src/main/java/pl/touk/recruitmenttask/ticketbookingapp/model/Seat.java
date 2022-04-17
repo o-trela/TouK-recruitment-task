@@ -14,6 +14,7 @@ import java.util.List;
 public class Seat {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int rowNum;
     private int seatNum;
@@ -23,7 +24,7 @@ public class Seat {
             mappedBy = "seat"
     )
     @JsonManagedReference
-    private List<ReservedSeat> reservedSeat;
+    private List<Ticket> ticket;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_room")

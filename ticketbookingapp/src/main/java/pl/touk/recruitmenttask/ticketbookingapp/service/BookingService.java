@@ -2,58 +2,52 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.touk.recruitmenttask.ticketbookingapp.model.Room;
-import pl.touk.recruitmenttask.ticketbookingapp.model.Screening;
-import pl.touk.recruitmenttask.ticketbookingapp.model.Seat;
-import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningInfoDto;
-import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningDto;
-import pl.touk.recruitmenttask.ticketbookingapp.model.dto.SeatDto;
-import pl.touk.recruitmenttask.ticketbookingapp.repository.RoomRepository;
+import pl.touk.recruitmenttask.ticketbookingapp.model.*;
+import pl.touk.recruitmenttask.ticketbookingapp.repository.ReservationRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.ScreeningRepository;
-import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.ScreeningDtoMapper;
-import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SeatDtoMapper;
+import pl.touk.recruitmenttask.ticketbookingapp.repository.SeatRepository;
+import pl.touk.recruitmenttask.ticketbookingapp.repository.TicketRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class BookingService {
     private final ScreeningRepository screeningRepository;
-    private final RoomRepository roomRepository;
-    private final SeatService seatService;
+    private final SeatRepository seatRepository;
+    private final ReservationRepository reservationRepository;
+    private final TicketRepository ticketRepository;
 
-    public List<Screening> getScreenings() {
-        return screeningRepository.findAll();
-    }
+    public Reservation makeReservation(int screeningId, String name, String surname, Map<Integer, TicketType> seats) {
+        Screening screening = screeningRepository.findById(screeningId).orElseThrow();
+        Integer[] seatIds = seats.keySet().toArray(new Integer[0]);
+        List<Seat> seatList = seatRepository.findAllByIdIn(seatIds);
 
-    public List<ScreeningDto> getScreeningsAfter(String start) {
-        LocalDateTime startingDate = LocalDateTime.parse(start);
-        LocalDate localDate = startingDate.toLocalDate();
-        LocalDateTime endingDate = localDate.atTime(LocalTime.MAX);
+        Reservation reservation = new Reservation();
+        List<Ticket> tickets = new ArrayList<>();
 
-        List<Screening> screeningList = screeningRepository.findByStartTimeBetween(startingDate, endingDate);
+        for (Seat seat : seatList) {
+            Ticket ticket = new Ticket();
+            TicketType ticketType = seats.get(seat.getId());
 
-        return ScreeningDtoMapper.mapToScreeningDtos(screeningList);
-    }
+            ticket.setTicketType(ticketType);
+            ticket.setReservation(reservation);
+            ticket.setScreening(screening);
+            ticket.setSeat(seat);
 
-    public ScreeningInfoDto getSingleScreening(int id) {
-        Screening pickedScreening = screeningRepository.findById(id).orElseThrow();
-        Room screeningRoom = roomRepository.findByScreening(pickedScreening);
+            tickets.add(ticket);
+        }
 
-        List<Seat> availableSeats = seatService.getAvailableSeatsByScreening(pickedScreening);
-        List<SeatDto> availableSeatsInfo = SeatDtoMapper.mapToSeatDtos(availableSeats);
+        reservation.setScreening(screening);
+        reservation.setName(name);
+        reservation.setSurname(surname);
+        reservation.setTicket(tickets);
 
-        List<Seat> reservedSeats = seatService.getReservedSeatsByScreening(pickedScreening);
-        List<SeatDto> reservedSeatsInfo = SeatDtoMapper.mapToSeatDtos(reservedSeats);
+        reservationRepository.save(reservation);
+        ticketRepository.saveAll(tickets);
 
-        return new ScreeningInfoDto(
-                ScreeningDtoMapper.mapToScreeningDto(pickedScreening),
-                screeningRoom.getId(),
-                availableSeatsInfo,
-                reservedSeatsInfo
-        );
+        return reservation;
     }
 }

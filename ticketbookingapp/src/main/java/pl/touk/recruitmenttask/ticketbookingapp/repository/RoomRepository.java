@@ -7,6 +7,5 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.Screening;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
-
     Room findByScreening(Screening screening);
 }

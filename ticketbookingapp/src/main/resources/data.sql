@@ -10,6 +10,8 @@ INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (1, '2022-04-29T
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (2, '2022-04-20T13:00:00', 2, 1);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (3, '2022-04-18T10:00:00', 1, 3);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (4, '2022-04-27T20:00:00', 3, 2);
+INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (5, '2022-04-27T21:00:00', 2, 3);
+INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (6, '2022-04-27T21:00:00', 3, 3);
 
 INSERT INTO Seat(id, row_num, seat_num, id_room) VALUES (1, 1, 1, 1);
 INSERT INTO Seat(id, row_num, seat_num, id_room) VALUES (2, 1, 2, 1);
@@ -434,12 +436,12 @@ INSERT INTO Reservation(id, name, surname, id_screening) VALUES (2, 'Beth', 'Bro
 INSERT INTO Reservation(id, name, surname, id_screening) VALUES (3, 'Jacob', 'Buck', 2);
 INSERT INTO Reservation(id, name, surname, id_screening) VALUES (4, 'Tessa', 'Violet', 3);
 
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (1, 45, 1, 2);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (2, 46, 1, 2);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (3, 47, 1, 2);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (4, 55, 2, 1);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (5, 143, 3, 2);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (6, 142, 3, 2);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (7, 394, 4, 3);
-INSERT INTO Reserved_seat(id, id_seat, id_reservation, id_screening) VALUES (8, 395, 4, 3);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (1, 1, 45, 1, 2);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (2, 3, 46, 1, 2);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (3, 1, 47, 1, 2);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (4, 2, 55, 2, 1);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (5, 1, 143, 3, 2);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (6, 1, 142, 3, 2);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (7, 2, 394, 4, 3);
+INSERT INTO Ticket(id, ticket_type, id_seat, id_reservation, id_screening) VALUES (8, 2, 395, 4, 3);
 

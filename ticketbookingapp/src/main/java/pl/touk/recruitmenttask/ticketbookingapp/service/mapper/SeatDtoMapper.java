@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SeatDtoMapper {
+    private SeatDtoMapper() {}
+
     public static List<SeatDto> mapToSeatDtos(List<Seat> seats) {
         return seats.stream()
                 .map(SeatDtoMapper::mapToSeatDto)

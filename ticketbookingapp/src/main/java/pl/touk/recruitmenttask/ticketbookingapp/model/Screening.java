@@ -15,6 +15,7 @@ import java.util.List;
 public class Screening {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -41,5 +42,5 @@ public class Screening {
             mappedBy = "screening"
     )
     @JsonManagedReference
-    private List<ReservedSeat> reservedSeat;
+    private List<Ticket> ticket;
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScreeningDtoMapper {
+    private ScreeningDtoMapper() {}
+
     public static List<ScreeningDto> mapToScreeningDtos(List<Screening> screeningList) {
         return screeningList.stream()
                 .map(ScreeningDtoMapper::mapToScreeningDto)
