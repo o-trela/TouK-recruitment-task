@@ -3,6 +3,7 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.*;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningInfoDto;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningDto;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +31,27 @@ public class SearchService {
 
     public List<ScreeningDto> getScreeningsOnInterval(String start) {
         LocalDateTime startingDate = LocalDateTime.parse(start);
-        LocalDate localDate = startingDate.toLocalDate();
-        LocalDateTime endingDate = localDate.atTime(LocalTime.MAX);
+        LocalDateTime endingDate = getEndOfTheDay(startingDate);
 
         List<Screening> screeningList = screeningRepository
-                .findByStartTimeBetween(startingDate, endingDate, Sort.by(Sort.Direction.ASC, "startTime", "movie.title"));
+                .findByStartTimeBetween(
+                        startingDate,
+                        endingDate,
+                        Sort.by(Sort.Direction.ASC, "startTime", "movie.title")
+                );
 
         return ScreeningDtoMapper.mapToScreeningDtos(screeningList);
     }
 
     public ScreeningInfoDto getSingleScreening(int id) {
-        Screening pickedScreening = screeningRepository.findById(id).orElseThrow();
+        Screening pickedScreening;
+        try {
+            pickedScreening = screeningRepository.findById(id).orElseThrow();
+        }
+        catch (NoSuchElementException e) {
+            throw new ResourceNotFoundException("Screening Not Found");
+        }
+
         Room screeningRoom = roomRepository.findByScreening(pickedScreening);
 
         List<Seat> availableSeats = seatService.getAvailableSeatsByScreening(pickedScreening);
@@ -54,5 +66,10 @@ public class SearchService {
                 availableSeatsInfo,
                 reservedSeatsInfo
         );
+    }
+
+    private LocalDateTime getEndOfTheDay(LocalDateTime dateTime) {
+        LocalDate localDate = dateTime.toLocalDate();
+        return localDate.atTime(LocalTime.MAX);
     }
 }

@@ -2,6 +2,7 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.touk.recruitmenttask.ticketbookingapp.model.Reservation;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Ticket;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Screening;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Seat;
@@ -30,4 +31,16 @@ public class SeatService {
     public List<Seat> getAvailableSeatsByScreening(Screening screening) {
         return screening.getRoom().getSeat();
     }
+
+    public boolean validateSeats(Screening screening, List<Seat> pickedSeats) {
+        List<Seat> roomSeats = screening.getRoom().getSeat();
+
+        for (Seat seat : pickedSeats) {
+            if (roomSeats.contains(seat)) continue;
+            return false;
+        }
+
+        return true;
+    }
+
 }
