@@ -3,18 +3,15 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.touk.recruitmenttask.ticketbookingapp.model.*;
-import pl.touk.recruitmenttask.ticketbookingapp.repository.SeatRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.TicketRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SeatService {
     private final TicketRepository ticketRepository;
-    private final SeatRepository seatRepository;
 
     public List<Seat> getReservedSeatsByScreening(Screening screening) {
         List<Seat> reservedSeats = new ArrayList<>();
@@ -43,50 +40,62 @@ public class SeatService {
         return true;
     }
 
-    public boolean checkAround(Screening screening, List<Seat> seats) {
+    public boolean ensureNotReservated(Screening screening, List<Seat> pickedSeats) {
+        List<Seat> reservedSeats = new ArrayList<>();
+        screening.getTicket().forEach(ticket -> reservedSeats.add(ticket.getSeat()));
+
+        for (Seat seat : pickedSeats) {
+            if (!reservedSeats.contains(seat)) continue;
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean ensureNoGapOccurs(Screening screening, List<Seat> pickedSeats) {
         Room room = screening.getRoom();
         List<Seat> roomSeats = room.getSeat();
 
         // consider reservation seats as already taken
         List<Seat> reservedSeats = new ArrayList<>();
         screening.getTicket().forEach(ticket -> reservedSeats.add(ticket.getSeat()));
-        reservedSeats.addAll(seats);
+        reservedSeats.addAll(pickedSeats);
 
-        for (Seat seat : seats) {
+        for (Seat seat : pickedSeats) {
             int rowNum = seat.getRowNum();
             int seatNum = seat.getSeatNum();
             int rowSize = getRowSize(roomSeats, rowNum);
 
-            if (seatNum < 3 || seatNum > rowSize - 2) {
-                int diff = seatNum < 3 ? 1 : -1;
-                int newSeatNum = seatNum + diff;
+            // check on which side is seat
+            int step = seatNum < rowSize / 2 ? 1 : -1;
+            if (checkNeighbours(seat, roomSeats, reservedSeats, step))
+                return false;
 
-                Seat seat1 = extractSeat(roomSeats, rowNum, newSeatNum);
-                if (!reservedSeats.contains(seat1)) {
-                    Seat seat3 = extractSeat(roomSeats, rowNum, newSeatNum + diff);
-                    if (reservedSeats.contains(seat3))
-                        return false;
-                }
+            // pass second side if seat is near the edge
+            if (seatNum < 3 || seatNum > rowSize - 2)
                 continue;
-            }
 
-            int leftNum = seatNum - 1;
-            int rightNum = seatNum + 1;
-
-            Seat seat1 = extractSeat(roomSeats, rowNum, leftNum);
-            if (!reservedSeats.contains(seat1)) {
-                Seat seat2 = extractSeat(roomSeats, rowNum, leftNum - 1);
-                if (reservedSeats.contains(seat2))
-                    return false;
-            }
-            Seat seat2 = extractSeat(roomSeats, rowNum, rightNum);
-            if (!reservedSeats.contains(seat2)) {
-                Seat seat3 = extractSeat(roomSeats, rowNum, rightNum + 1);
-                if (reservedSeats.contains(seat3))
-                    return false;
-            }
+            // change direction
+            step *= -1;
+            if (checkNeighbours(seat, roomSeats, reservedSeats, step))
+                return false;
         }
         return true;
+    }
+
+    private boolean checkNeighbours(Seat seat, List<Seat> roomSeats, List<Seat> reservedSeats, int step) {
+        int rowNum = seat.getRowNum();
+        int seatNum = seat.getSeatNum();
+
+        int firstSeatNum = seatNum + step;
+        int secondSeatNum = firstSeatNum + step;
+
+        Seat firstStepSeat = extractSeat(roomSeats, rowNum, firstSeatNum);
+        if (!reservedSeats.contains(firstStepSeat)) {
+            Seat secondStepSeat = extractSeat(roomSeats, rowNum, secondSeatNum);
+            return reservedSeats.contains(secondStepSeat);
+        }
+        return false;
     }
 
     private Seat extractSeat(List<Seat> seats, int rowNum, int seatNum) {
@@ -101,5 +110,4 @@ public class SeatService {
                 .filter(targetSeat -> targetSeat.getRowNum() == rowNum)
                 .count();
     }
-
 }

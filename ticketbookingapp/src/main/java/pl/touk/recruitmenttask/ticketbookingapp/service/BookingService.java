@@ -63,11 +63,13 @@ public class BookingService {
         Integer[] seatIds = seatsType.keySet().toArray(new Integer[0]);
         List<Seat> seatList = seatRepository.findAllByIdIn(seatIds);
 
-        if (seatList.isEmpty() || !seatService.validateSeats(screening, seatList)) {
+        if (seatList.isEmpty() || !seatService.validateSeats(screening, seatList))
             throw new WrongSeatException("Seat Not Found");
-        }
 
-        if (!seatService.checkAround(screening, seatList))
+        if (!seatService.ensureNotReservated(screening, seatList))
+            throw new WrongSeatException("Seat Already Taken");
+
+        if (!seatService.ensureNoGapOccurs(screening, seatList))
             throw new WrongSeatException("Not Allowed To Leave One Seat Between");
 
         List<Ticket> tickets = new ArrayList<>();
