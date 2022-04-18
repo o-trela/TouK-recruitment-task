@@ -67,6 +67,9 @@ public class BookingService {
             throw new WrongSeatException("Seat Not Found");
         }
 
+        if (!seatService.checkAround(screening, seatList))
+            throw new WrongSeatException("Not Allowed To Leave One Seat Between");
+
         List<Ticket> tickets = new ArrayList<>();
         for (Seat seat : seatList) {
             Ticket ticket = new Ticket();
