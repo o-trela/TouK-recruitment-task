@@ -2,9 +2,10 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.touk.recruitmenttask.ticketbookingapp.exception.AlreadyTakenException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.TooLateException;
-import pl.touk.recruitmenttask.ticketbookingapp.exception.WrongSeatException;
+import pl.touk.recruitmenttask.ticketbookingapp.exception.BadRequestException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.*;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.ReservationRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.TicketRepository;
@@ -58,13 +59,13 @@ public class BookingService {
         List<Seat> seatList = seatService.getSeatsByIds(seatIds);
 
         if (seatList.isEmpty() || !seatService.validateSeats(screening, seatList))
-            throw new WrongSeatException("Seat Not Found");
+            throw new BadRequestException("Seat Not Found");
 
         if (!seatService.ensureNotReserved(screening, seatList))
-            throw new WrongSeatException("Seat Already Taken");
+            throw new AlreadyTakenException("Seat Already Taken");
 
         if (!seatService.ensureNoGapOccurs(screening, seatList))
-            throw new WrongSeatException("Not Allowed To Leave One Seat Between");
+            throw new BadRequestException("Not Allowed To Leave One Seat Between");
 
         List<Ticket> tickets = new ArrayList<>();
         for (Seat seat : seatList) {

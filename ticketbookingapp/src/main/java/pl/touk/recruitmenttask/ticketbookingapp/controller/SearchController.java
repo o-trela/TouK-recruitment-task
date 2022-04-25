@@ -16,6 +16,7 @@ import pl.touk.recruitmenttask.ticketbookingapp.service.SeatService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.ScreeningDtoMapper;
 import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SeatDtoMapper;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 

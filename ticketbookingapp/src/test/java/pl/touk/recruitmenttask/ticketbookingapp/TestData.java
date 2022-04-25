@@ -122,4 +122,13 @@ public class TestData {
                             .room(roomList.get(2))
                             .build()
             ));
+
+    public static Reservation
+            reservation = Reservation.builder()
+                    .id(1)
+                    .name("test")
+                    .surname("test")
+                    .ticket(ticketList.subList(0,3))
+                    .screening(screeningList.get(0))
+                    .build();
 }

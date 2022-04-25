@@ -21,25 +21,36 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiEx, notFound);
     }
 
-    @ExceptionHandler(value = {WrongSeatException.class})
-    public ResponseEntity<Object> handleWrongSeatException(WrongSeatException ex) {
-        HttpStatus notFound = HttpStatus.BAD_REQUEST;
+    @ExceptionHandler(value = {BadRequestException.class})
+    public ResponseEntity<Object> handleWrongSeatException(BadRequestException ex) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         ApiException apiEx = new ApiException(
                 ex.getMessage(),
-                notFound,
+                badRequest,
                 ZonedDateTime.now()
         );
-        return new ResponseEntity<>(apiEx, notFound);
+        return new ResponseEntity<>(apiEx, badRequest);
     }
 
     @ExceptionHandler(value = {TooLateException.class})
     public ResponseEntity<Object> handleTooLateException(TooLateException ex) {
-        HttpStatus notFound = HttpStatus.I_AM_A_TEAPOT;
+        HttpStatus methodNotAllowed = HttpStatus.METHOD_NOT_ALLOWED;
         ApiException apiEx = new ApiException(
                 ex.getMessage(),
-                notFound,
+                methodNotAllowed,
                 ZonedDateTime.now()
         );
-        return new ResponseEntity<>(apiEx, notFound);
+        return new ResponseEntity<>(apiEx, methodNotAllowed);
+    }
+
+    @ExceptionHandler(value = {AlreadyTakenException.class})
+    public ResponseEntity<Object> handleAlreadyTakenException(AlreadyTakenException ex) {
+        HttpStatus conflict = HttpStatus.CONFLICT;
+        ApiException apiEx = new ApiException(
+                ex.getMessage(),
+                conflict,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiEx, conflict);
     }
 }
