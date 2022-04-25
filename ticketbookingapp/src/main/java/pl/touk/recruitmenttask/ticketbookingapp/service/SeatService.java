@@ -3,15 +3,23 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.touk.recruitmenttask.ticketbookingapp.model.*;
+import pl.touk.recruitmenttask.ticketbookingapp.repository.SeatRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.TicketRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class SeatService {
     private final TicketRepository ticketRepository;
+    private final SeatRepository seatRepository;
+
+    public List<Seat> getSeatsByIds(Set<Integer> ids) {
+        Integer[] seatIds = ids.toArray(new Integer[0]);
+        return seatRepository.findAllByIdIn(seatIds);
+    }
 
     public List<Seat> getReservedSeatsByScreening(Screening screening) {
         List<Seat> reservedSeats = new ArrayList<>();
@@ -40,7 +48,7 @@ public class SeatService {
         return true;
     }
 
-    public boolean ensureNotReservated(Screening screening, List<Seat> pickedSeats) {
+    public boolean ensureNotReserved(Screening screening, List<Seat> pickedSeats) {
         List<Seat> reservedSeats = new ArrayList<>();
         screening.getTicket().forEach(ticket -> reservedSeats.add(ticket.getSeat()));
 
@@ -83,6 +91,7 @@ public class SeatService {
         return true;
     }
 
+    // returns true if there can be not allowed gap between seats
     private boolean checkNeighbours(Seat seat, List<Seat> roomSeats, List<Seat> reservedSeats, int step) {
         int rowNum = seat.getRowNum();
         int seatNum = seat.getSeatNum();
@@ -102,7 +111,7 @@ public class SeatService {
         return seats.stream()
                 .filter(seat2 -> seat2.getRowNum() == rowNum && seat2.getSeatNum() == seatNum)
                 .findAny()
-                .orElseThrow();
+                .orElseThrow(); // not suppose to happen
     }
 
     private int getRowSize(List<Seat> seats, int rowNum) {

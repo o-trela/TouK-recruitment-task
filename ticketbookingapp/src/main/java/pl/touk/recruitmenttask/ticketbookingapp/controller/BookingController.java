@@ -14,6 +14,7 @@ import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SummaryDtoMapper;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -28,16 +29,16 @@ public class BookingController {
                                       @RequestBody @NotBlank Map<Integer, TicketType> seats,
                                       @RequestParam
                                           @NotBlank @Size(min = 3)
-                                          @Pattern(regexp = "^[A-Z][a-z]+$") String name,
+                                          @Pattern(regexp = "^[\\p{Lu}][\\p{Ll}][\\p{Ll}]+$") String name,
                                       @RequestParam
                                           @NotBlank @Size(min = 3)
-                                          @Pattern(regexp = "^[A-Z][a-z][a-z]+([\s][A-Z][a-z][a-z]+)*$") String surname) {
+                                          @Pattern(regexp = "^[\\p{Lu}][\\p{Ll}][\\p{Ll}]+([ ][\\p{Lu}][\\p{Ll}][\\p{Ll}]+)?$") String surname) {
 
         if (seats.isEmpty()) {
             throw new WrongSeatException("No Seats Were Passed");
         }
 
-        Reservation reservation = bookingService.makeReservation(screeningId, name, surname, seats);
+        Reservation reservation = bookingService.makeReservation(screeningId, name, surname, seats, LocalDateTime.now());
         return SummaryDtoMapper.mapToSummaryDto(reservation);
     }
 }

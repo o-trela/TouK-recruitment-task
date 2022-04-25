@@ -7,32 +7,26 @@ import pl.touk.recruitmenttask.ticketbookingapp.exception.TooLateException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.WrongSeatException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.*;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.ReservationRepository;
-import pl.touk.recruitmenttask.ticketbookingapp.repository.ScreeningRepository;
-import pl.touk.recruitmenttask.ticketbookingapp.repository.SeatRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.TicketRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.service.properties.PropertiesConfig;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class BookingService {
-    private final ScreeningRepository screeningRepository;
-    private final SeatRepository seatRepository;
     private final ReservationRepository reservationRepository;
     private final TicketRepository ticketRepository;
     private final SeatService seatService;
+    private final SearchService searchService;
 
-    public Reservation makeReservation(int screeningId, String name, String surname, Map<Integer, TicketType> seatsType) {
+    public Reservation makeReservation(int screeningId, String name, String surname, Map<Integer, TicketType> seatsType, LocalDateTime now) {
         Reservation reservation = new Reservation();
 
         Screening screening;
         try {
-            screening = screeningRepository.findById(screeningId).orElseThrow();
+            screening = searchService.getSingleScreening(screeningId);
         }
         catch (NoSuchElementException e) {
             throw new ResourceNotFoundException("Screening Not Found");
@@ -41,7 +35,7 @@ public class BookingService {
         LocalDateTime startTime = screening.getStartTime();
         if (startTime
                 .minusMinutes(PropertiesConfig.expirationTimeMin)
-                .isBefore(LocalDateTime.now())) {
+                .isBefore(now)) {
             throw new TooLateException("It Is Too Late To Make A Reservation");
         }
 
@@ -60,13 +54,13 @@ public class BookingService {
 
     private List<Ticket> prepareTickets(Reservation reservation, Map<Integer, TicketType> seatsType) {
         Screening screening = reservation.getScreening();
-        Integer[] seatIds = seatsType.keySet().toArray(new Integer[0]);
-        List<Seat> seatList = seatRepository.findAllByIdIn(seatIds);
+        Set<Integer> seatIds = seatsType.keySet();
+        List<Seat> seatList = seatService.getSeatsByIds(seatIds);
 
         if (seatList.isEmpty() || !seatService.validateSeats(screening, seatList))
             throw new WrongSeatException("Seat Not Found");
 
-        if (!seatService.ensureNotReservated(screening, seatList))
+        if (!seatService.ensureNotReserved(screening, seatList))
             throw new WrongSeatException("Seat Already Taken");
 
         if (!seatService.ensureNoGapOccurs(screening, seatList))

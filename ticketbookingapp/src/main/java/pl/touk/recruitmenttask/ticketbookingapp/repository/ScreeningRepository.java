@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, Integer> {
-    List<Screening> findByStartTimeBetween(LocalDateTime start, LocalDateTime end, Sort startTime);
+    List<Screening> findByStartTimeBetween(LocalDateTime start, LocalDateTime end, Sort sortMethod);
 }
