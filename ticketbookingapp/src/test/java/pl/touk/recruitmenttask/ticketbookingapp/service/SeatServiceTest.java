@@ -80,5 +80,17 @@ class SeatServiceTest {
                 TestData.screeningList.get(0),
                 TestData.seatList.subList(5,6)
         ));
+
+        // rowNum == 3
+        assertTrue(
+                cheatedSeatService.ensureNoGapOccurs(
+                        TestData.screeningList.get(2),
+                        TestData.seatList.subList(8,10)
+                ));
+        assertFalse(
+                cheatedSeatService.ensureNoGapOccurs(
+                TestData.screeningList.get(2),
+                TestData.seatList.subList(9,10)
+        ));
     }
 }

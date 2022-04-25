@@ -63,6 +63,22 @@ public class TestData {
                             .id(127)
                             .seatNum(4)
                             .rowNum(1)
+                            .build(),
+                    // rowNum == 3 \/
+                    Seat.builder()
+                            .id(200)
+                            .seatNum(1)
+                            .rowNum(1)
+                            .build(),
+                    Seat.builder()
+                            .id(201)
+                            .seatNum(2)
+                            .rowNum(1)
+                            .build(),
+                    Seat.builder()
+                            .id(202)
+                            .seatNum(3)
+                            .rowNum(1)
                             .build()
             )
     );
@@ -79,6 +95,7 @@ public class TestData {
                             .build(),
                     Room.builder()
                             .id(3)
+                            .seat(seatList.subList(7,10))
                             .build()
             )
     );
@@ -96,6 +113,10 @@ public class TestData {
                     Ticket.builder()
                             .id(3)
                             .seat(seatList.get(3))
+                            .build(),
+                    Ticket.builder()
+                            .id(4)
+                            .seat(seatList.get(7))
                             .build()
             )
     );
@@ -116,10 +137,11 @@ public class TestData {
                             .room(roomList.get(1))
                             .build(),
                     Screening.builder()
-                            .id(2)
+                            .id(3)
                             .movie(movieList.get(0))
                             .startTime(testStartTime.plusDays(1))
                             .room(roomList.get(2))
+                            .ticket(ticketList.subList(3,4))
                             .build()
             ));
 

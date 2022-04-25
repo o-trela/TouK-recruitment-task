@@ -11,7 +11,6 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.dto.SummaryDto;
 import pl.touk.recruitmenttask.ticketbookingapp.service.BookingService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SummaryDtoMapper;
 
-import javax.validation.ValidationException;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;

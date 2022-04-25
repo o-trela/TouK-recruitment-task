@@ -74,8 +74,23 @@ public class SeatService {
             int seatNum = seat.getSeatNum();
             int rowSize = getRowSize(roomSeats, rowNum);
 
+
+            // in case row size is <= 3 (don't need to check anything for < 3)
+            if (rowSize <= 3) {
+                 if (rowSize == 3) {
+                     Seat firstSeat = extractSeat(roomSeats, rowNum, 1);
+                     Seat secondSeat = extractSeat(roomSeats, rowNum, 2);
+                     Seat thirdSeat = extractSeat(roomSeats, rowNum, 3);
+                     if (reservedSeats.contains(firstSeat)
+                             && !reservedSeats.contains(secondSeat)
+                             && reservedSeats.contains(thirdSeat))
+                         return false;
+                 }
+                 continue;
+            }
+
             // check on which side is seat
-            int step = seatNum < rowSize / 2 ? 1 : -1;
+            int step = seatNum <= rowSize / 2 ? 1 : -1;
             if (checkNeighbours(seat, roomSeats, reservedSeats, step))
                 return false;
 

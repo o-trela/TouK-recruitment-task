@@ -2,30 +2,24 @@ package pl.touk.recruitmenttask.ticketbookingapp.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import pl.touk.recruitmenttask.ticketbookingapp.TestData;
 import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.StringValidator;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.AlreadyTakenException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.TooLateException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
-import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningInfoDto;
 import pl.touk.recruitmenttask.ticketbookingapp.service.BookingService;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,7 +38,6 @@ class BookingControllerTest {
     private StringValidator fakeStringValidator;
 
     private String requestJson;
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() throws JsonProcessingException {
@@ -54,7 +47,7 @@ class BookingControllerTest {
         Map<Integer, TicketType> seats = new HashMap<>();
         seats.put(1, TicketType.adult);
 
-        objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         requestJson = objectMapper.writeValueAsString(seats);
     }
 
@@ -83,7 +76,10 @@ class BookingControllerTest {
                         .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("No Seats Were Passed"))
+                .andExpect(jsonPath("$.timestamp").hasJsonPath());
     }
 
     @Test
@@ -97,7 +93,10 @@ class BookingControllerTest {
                         .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("Wrong Name Pattern"))
+                .andExpect(jsonPath("$.timestamp").hasJsonPath());
     }
 
     @Test
@@ -111,7 +110,10 @@ class BookingControllerTest {
                         .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
-        ).andExpect(status().isConflict());
+        ).andExpect(status().isConflict())
+                .andExpect(jsonPath("$.httpStatus").value("CONFLICT"))
+                .andExpect(jsonPath("$.message").hasJsonPath())
+                .andExpect(jsonPath("$.timestamp").hasJsonPath());
     }
 
     @Test
@@ -125,7 +127,10 @@ class BookingControllerTest {
                         .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
-        ).andExpect(status().isNotFound());
+        ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.httpStatus").value("NOT_FOUND"))
+                .andExpect(jsonPath("$.message").hasJsonPath())
+                .andExpect(jsonPath("$.timestamp").hasJsonPath());;
     }
 
     @Test
@@ -139,6 +144,9 @@ class BookingControllerTest {
                         .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
-        ).andExpect(status().isMethodNotAllowed());
+        ).andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.httpStatus").value("METHOD_NOT_ALLOWED"))
+                .andExpect(jsonPath("$.message").hasJsonPath())
+                .andExpect(jsonPath("$.timestamp").hasJsonPath());;
     }
 }
