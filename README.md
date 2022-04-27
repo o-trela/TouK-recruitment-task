@@ -47,9 +47,19 @@ This REST API contains 4 endpoints:
  }
 ```
 
+## Reservation assumptions
+
+- Name must be one word starting with capital letter (only first letter can be capital).
+- Surname may consist of two words beginning with a capital letter and separated with one whitespace.
+- Both name and surname must be at least three characters long.
+- Seats can be booked at latest 15 minutes before the screening begins.
+- Seats are devided to rows and there cannot be a single place left over between two already reserved places.
+- Booked seat cannot be reserved again.
+- When booking seats you are forced to choose at least one.
+
 ## Test cases
 
-I prepared bash script to simulate test cases, but you are welcome to test it manually.
+I prepared bash script to simulate test cases (**curl is required**), but you are welcome to test it manually.
 
 Port 8080 is set by default.
 
@@ -75,9 +85,9 @@ curl -X POST "http://localhost:8080/reservation/1?name={Touk}&surname={Touk}" -H
 
 **To run my script (bash):**
 
-Step into project directory.
+Step into project directory and <code>test_cases</code> folder.
 ```shell
-cd ticketbookingapp/
+cd ticketbookingapp/test_cases
 ```
 
 Successful test cases:
@@ -95,6 +105,15 @@ Script takes additional parameter for PORT number:
 ./success_demo 8000
 ```
 
+## Database
+
+Database is build on H2 system with Hibernate.
+
+Access to database is gained with the help of Spring JPA.
+
+### Database structure
+![Database ER diagram (crow's foot)](https://user-images.githubusercontent.com/79324178/165558957-94903526-5177-4d11-9c21-dd400457cc99.png)
+
 
 ## **Notes**
-
+Test data is automatically initialized to the system and may expire over the time.
