@@ -47,6 +47,10 @@ This REST API contains 4 endpoints:
  }
 ```
 
+## Use case diagram
+
+![image](https://user-images.githubusercontent.com/79324178/165572722-65c98afc-2da0-4d41-aa0c-92b7c87f8677.png)
+
 ## Reservation assumptions
 
 - Name must be one word starting with capital letter (only first letter can be capital).
