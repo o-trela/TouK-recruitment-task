@@ -116,8 +116,8 @@ Database is build on H2 system with Hibernate.
 Access to database is gained with the help of Spring JPA.
 
 ### Database structure
-![Database ER diagram (crow's foot)](https://user-images.githubusercontent.com/79324178/165558957-94903526-5177-4d11-9c21-dd400457cc99.png)
 
+![Database ER diagram (crow's foot)](https://user-images.githubusercontent.com/79324178/165573650-0a2659f7-132f-4f98-b126-fe795f6f2b9a.jpeg)
 
 ## **Notes**
 Test data is automatically initialized to the system and may expire over the time.
