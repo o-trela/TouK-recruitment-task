@@ -6,7 +6,7 @@ INSERT INTO Room(id, no_seats) VALUES (1, 150);
 INSERT INTO Room(id, no_seats) VALUES (2, 130);
 INSERT INTO Room(id, no_seats) VALUES (3, 135);
 
-INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (1, '2022-04-29T16:00:00', 1, 1);
+INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (1, '2022-06-29T16:00:00', 1, 1);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (2, '2022-04-20T13:00:00', 2, 1);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (3, '2022-04-18T10:00:00', 1, 3);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (4, '2022-04-27T20:00:00', 3, 2);

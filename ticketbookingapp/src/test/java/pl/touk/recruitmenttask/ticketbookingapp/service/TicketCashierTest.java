@@ -13,5 +13,6 @@ class TicketCashierTest {
         assertEquals(PropertiesConfig.adultPrice, TicketCashier.checkTicketCost(TicketType.adult));
         assertEquals(PropertiesConfig.studentPrice, TicketCashier.checkTicketCost(TicketType.student));
         assertEquals(PropertiesConfig.childPrice, TicketCashier.checkTicketCost(TicketType.child));
+
     }
 }
