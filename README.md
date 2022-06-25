@@ -84,14 +84,14 @@ curl -X GET "http://localhost:8080/screenings/1"
 
 Make reservation:
 ```shell
-curl -X POST "http://localhost:8080/reservation/1?name={Touk}&surname={Touk}" -H "Content-Type: application/json" -d '{"20": "adult", "21": "child"}'
+curl -X POST "http://localhost:8080/reservation/1?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"20": "adult", "21": "child"}'
 ```
 
 **To run my script (bash):**
 
 Step into project directory and <code>test_cases</code> folder.
 ```shell
-cd ticketbookingapp/test_cases
+cd test_cases
 ```
 
 Successful test cases:
