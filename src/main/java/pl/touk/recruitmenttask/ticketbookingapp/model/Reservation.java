@@ -21,8 +21,6 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //@NameValidation
-    //@Size(min = 5)
     private String name;
     private String surname;
 
