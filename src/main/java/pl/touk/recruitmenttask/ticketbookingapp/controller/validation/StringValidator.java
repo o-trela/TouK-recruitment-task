@@ -15,11 +15,17 @@ public class StringValidator implements Validator<String> {
     @Override
     public boolean isValid(String value) {
         if (value == null) return false;
-        if (regex.isEmpty()) throw new IllegalStateException("Regex Not Known");
+        if (regex == null) throw new IllegalStateException("Regex Not Known");
 
         Pattern validPattern = Pattern.compile(regex);
 
         Matcher matcher = validPattern.matcher(value);
         return matcher.matches();
+    }
+
+
+
+    public boolean isRegexNull() {
+        return regex == null;
     }
 }

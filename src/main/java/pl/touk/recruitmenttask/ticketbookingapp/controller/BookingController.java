@@ -7,12 +7,11 @@ import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.StringVali
 import pl.touk.recruitmenttask.ticketbookingapp.exception.BadRequestException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Reservation;
 import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
+import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ReservationDto;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.SummaryDto;
 import pl.touk.recruitmenttask.ticketbookingapp.service.BookingService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SummaryDtoMapper;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -26,19 +25,24 @@ public class BookingController {
     @PostMapping("/reservation/{screeningId}")
     @ResponseStatus(HttpStatus.CREATED)
     public SummaryDto makeReservation(@PathVariable int screeningId,
-                                      @RequestParam @NotBlank @Size(min = 3) String name,
-                                      @RequestParam @NotBlank @Size(min = 3) String surname,
-                                      @RequestBody Map<Integer, TicketType> seats) {
+                                      @RequestBody ReservationDto clientReservationInfo) {
 
-        if (seats.isEmpty()) {
-            throw new BadRequestException("No Seats Were Passed");
-        }
+        var seats = clientReservationInfo.seats();
+        var name = clientReservationInfo.name();
+        var surname = clientReservationInfo.surname();
 
+        validateSeats(seats);
         validateName(name);
         validateSurname(surname);
 
         Reservation reservation = bookingService.makeReservation(screeningId, name, surname, seats, LocalDateTime.now());
         return SummaryDtoMapper.mapToSummaryDto(reservation);
+    }
+
+    private void validateSeats(Map<Integer, TicketType> seats) {
+        if (seats.isEmpty()) {
+            throw new BadRequestException("No Seats Were Passed");
+        }
     }
 
     private void validateName(String name) {
