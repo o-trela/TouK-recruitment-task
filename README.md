@@ -91,7 +91,7 @@ curl -X POST "http://localhost:8080/reservation/1?name=Touk&surname=Touk" -H "Co
 
 Step into project directory and <code>test_cases</code> folder.
 ```shell
-cd ticketbookingapp/test_cases
+cd test_cases
 ```
 
 Successful test cases:
