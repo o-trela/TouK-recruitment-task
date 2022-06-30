@@ -34,7 +34,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {TooLateException.class})
     public ResponseEntity<Object> handleTooLateException(TooLateException ex) {
-        HttpStatus methodNotAllowed = HttpStatus.METHOD_NOT_ALLOWED;
+        HttpStatus methodNotAllowed = HttpStatus.GONE;
         ApiException apiEx = new ApiException(
                 ex.getMessage(),
                 methodNotAllowed,

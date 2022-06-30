@@ -2,6 +2,7 @@ package pl.touk.recruitmenttask.ticketbookingapp.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.jni.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Room;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Screening;
@@ -28,17 +29,18 @@ public class SearchController {
     private final SeatService seatService;
     private final RoomService roomService;
 
-    @GetMapping("/screenings")
-    public List<ScreeningDto> getAllScreenings() {
-        List<Screening> screeningList = searchService.getScreenings();
+    @PostMapping("/all-screenings")
+    public List<ScreeningDto> getAllScreenings(@RequestParam(required = false) Integer page) {
+        int pageNumber = page != null && page >= 1 ? page : 1;
+        List<Screening> screeningList = searchService.getScreenings(pageNumber - 1);
         return ScreeningDtoMapper.mapToScreeningDtos(screeningList);
     }
 
     @PostMapping("/screenings")
     public List<ScreeningDto> getScreeningsBetween(
-            @RequestParam(required = true) String start) {
-        LocalDateTime startingTime = LocalDateTime.parse(start);
-        List<Screening> screeningList = searchService.getScreeningsOnInterval(startingTime);
+            @RequestParam(required = true)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start) {
+        List<Screening> screeningList = searchService.getScreeningsOnInterval(start);
         return ScreeningDtoMapper.mapToScreeningDtos(screeningList);
     }
 

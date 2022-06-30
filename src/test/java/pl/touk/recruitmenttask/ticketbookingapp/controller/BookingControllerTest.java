@@ -10,7 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.touk.recruitmenttask.ticketbookingapp.TestData;
-import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.StringValidator;
+import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.NameValidator;
+import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.SurnameValidator;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.AlreadyTakenException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundException;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.TooLateException;
@@ -35,20 +36,29 @@ class BookingControllerTest {
     private BookingService fakeBookingService;
 
     @MockBean
-    private StringValidator fakeStringValidator;
+    private NameValidator fakeNameValidator;
+
+    @MockBean
+    private SurnameValidator fakeSurnameValidator;
 
     private String requestJson;
 
     @BeforeEach
     public void setup() throws JsonProcessingException {
         when(fakeBookingService.makeReservation(anyInt(), anyString(), anyString(), anyMap(), any())).thenReturn(TestData.reservation);
-        when(fakeStringValidator.isValid(anyString())).thenReturn(true);
+        when(fakeNameValidator.isValid(anyString())).thenReturn(true);
+        when(fakeSurnameValidator.isValid(anyString())).thenReturn(true);
 
         Map<Integer, TicketType> seats = new HashMap<>();
         seats.put(1, TicketType.adult);
 
+        Map<String, Object> testContents = new HashMap<>();
+        testContents.put("name", "Test");
+        testContents.put("surname", "Test");
+        testContents.put("seats", seats);
+
         ObjectMapper objectMapper = new ObjectMapper();
-        requestJson = objectMapper.writeValueAsString(seats);
+        requestJson = objectMapper.writeValueAsString(testContents);
     }
 
     @Test
@@ -56,8 +66,6 @@ class BookingControllerTest {
         String url = "/reservation/{screeningId}";
         mockMvc.perform(
                 post(url, 1)
-                        .param("name", "Test")
-                        .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
         ).andExpect(status().isCreated())
@@ -67,13 +75,17 @@ class BookingControllerTest {
 
     @Test
     void makeReservationBadRequest() throws Exception {
-        requestJson = "{}";
+        requestJson = """
+                {
+                  "surname": "Test",
+                  "name": "Test",
+                  "seats": {}
+                }
+                """;
 
         String url = "/reservation/{screeningId}";
         mockMvc.perform(
                 post(url, 1)
-                        .param("name", "Test")
-                        .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
         ).andExpect(status().isBadRequest())
@@ -84,13 +96,11 @@ class BookingControllerTest {
 
     @Test
     void makeReservationBadRequestName() throws Exception {
-        when(fakeStringValidator.isValid(anyString())).thenReturn(false);
+        when(fakeNameValidator.isValid(anyString())).thenReturn(false);
 
         String url = "/reservation/{screeningId}";
         mockMvc.perform(
                 post(url, 1)
-                        .param("name", "Test")
-                        .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
         ).andExpect(status().isBadRequest())
@@ -106,8 +116,6 @@ class BookingControllerTest {
         String url = "/reservation/{screeningId}";
         mockMvc.perform(
                 post(url, 1)
-                        .param("name", "Test")
-                        .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
         ).andExpect(status().isConflict())
@@ -123,8 +131,6 @@ class BookingControllerTest {
         String url = "/reservation/{screeningId}";
         mockMvc.perform(
                 post(url, 1)
-                        .param("name", "Test")
-                        .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
         ).andExpect(status().isNotFound())
@@ -140,12 +146,10 @@ class BookingControllerTest {
         String url = "/reservation/{screeningId}";
         mockMvc.perform(
                 post(url, 1)
-                        .param("name", "Test")
-                        .param("surname", "Test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
-        ).andExpect(status().isMethodNotAllowed())
-                .andExpect(jsonPath("$.httpStatus").value("METHOD_NOT_ALLOWED"))
+        ).andExpect(status().isGone())
+                .andExpect(jsonPath("$.httpStatus").value("GONE"))
                 .andExpect(jsonPath("$.message").hasJsonPath())
                 .andExpect(jsonPath("$.timestamp").hasJsonPath());;
     }

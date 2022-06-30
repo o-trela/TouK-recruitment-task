@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import pl.touk.recruitmenttask.ticketbookingapp.TestData;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Screening;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.ScreeningRepository;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,9 +39,9 @@ class SearchServiceTest {
 
     @Test
     void shouldReturnScreenings() {
-        when(fakeScreeningRepository.findAll()).thenReturn(TestData.screeningList);
+        when(fakeScreeningRepository.findAllByStartTimeIsAfter(any(), any())).thenReturn(TestData.screeningList);
 
-        assertEquals(TestData.screeningList, cheatedSearchService.getScreenings());
+        assertEquals(TestData.screeningList, cheatedSearchService.getScreenings(0));
     }
 
     @Test

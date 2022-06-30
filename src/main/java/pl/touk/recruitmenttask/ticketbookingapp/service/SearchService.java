@@ -2,6 +2,8 @@ package pl.touk.recruitmenttask.ticketbookingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundException;
@@ -17,10 +19,15 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 public class SearchService {
+    private static final int PAGE_SIZE = 10;
     private final ScreeningRepository screeningRepository;
 
-    public List<Screening> getScreenings() {
-        return screeningRepository.findAll();
+    public List<Screening> getScreenings(int pageNumber) {
+        return screeningRepository
+                .findAllByStartTimeIsAfter(
+                        LocalDateTime.now(),
+                        PageRequest.of(pageNumber, PAGE_SIZE)
+                );
     }
 
     public List<Screening> getScreeningsOnInterval(LocalDateTime startingDate) {

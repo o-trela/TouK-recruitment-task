@@ -37,11 +37,11 @@ class SearchControllerTest {
 
     @Test
     void getAllScreenings() throws Exception {
-        when(fakeSearchService.getScreenings()).thenReturn(TestData.screeningList);
+        when(fakeSearchService.getScreenings(anyInt())).thenReturn(TestData.screeningList);
 
-        String url = "/screenings";
+        String url = "/all-screenings";
         mockMvc.perform(
-                get(url)
+                post(url).param("page", "0")
         ).andExpect(status().isOk())
                 .andExpect(jsonPath("$..screeningId").hasJsonPath())
                 .andExpect(jsonPath("$..title").hasJsonPath())

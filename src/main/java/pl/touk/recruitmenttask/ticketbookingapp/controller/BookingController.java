@@ -3,7 +3,8 @@ package pl.touk.recruitmenttask.ticketbookingapp.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.StringValidator;
+import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.NameValidator;
+import pl.touk.recruitmenttask.ticketbookingapp.controller.validation.SurnameValidator;
 import pl.touk.recruitmenttask.ticketbookingapp.exception.BadRequestException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Reservation;
 import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
@@ -20,7 +21,8 @@ import java.util.Map;
 public class BookingController {
 
     private final BookingService bookingService;
-    private final StringValidator stringValidator;
+    private final NameValidator nameValidator;
+    private final SurnameValidator surnameValidator;
 
     @PostMapping("/reservation/{screeningId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -35,7 +37,14 @@ public class BookingController {
         validateName(name);
         validateSurname(surname);
 
-        Reservation reservation = bookingService.makeReservation(screeningId, name, surname, seats, LocalDateTime.now());
+        Reservation reservation = bookingService.makeReservation(
+                screeningId,
+                name,
+                surname,
+                seats,
+                LocalDateTime.now()
+        );
+
         return SummaryDtoMapper.mapToSummaryDto(reservation);
     }
 
@@ -46,15 +55,13 @@ public class BookingController {
     }
 
     private void validateName(String name) {
-        stringValidator.setRegex("^[\\p{Lu}][\\p{Ll}][\\p{Ll}]+$");
-        if (!stringValidator.isValid(name)) {
+        if (!nameValidator.isValid(name)) {
             throw new BadRequestException("Wrong Name Pattern");
         }
     }
 
     private void validateSurname(String surname) {
-        stringValidator.setRegex("^[\\p{Lu}][\\p{Ll}][\\p{Ll}]+([ ][\\p{Lu}][\\p{Ll}][\\p{Ll}]+)?$");
-        if (!stringValidator.isValid(surname)) {
+        if (!surnameValidator.isValid(surname)) {
             throw new BadRequestException("Wrong Surname Pattern");
         }
     }

@@ -121,6 +121,13 @@ public class TestData {
             )
     );
 
+    public static Screening futureScreening = Screening.builder()
+            .id(4)
+            .movie(movieList.get(1))
+            .startTime(LocalDateTime.now().plusDays(2))
+            .room(roomList.get(2))
+            .build();
+
     public static List<Screening> screeningList = new ArrayList<>(
             List.of(
                     Screening.builder()
@@ -142,7 +149,8 @@ public class TestData {
                             .startTime(testStartTime.plusDays(1))
                             .room(roomList.get(2))
                             .ticket(ticketList.subList(3,4))
-                            .build()
+                            .build(),
+                    futureScreening
             ));
 
     public static Reservation

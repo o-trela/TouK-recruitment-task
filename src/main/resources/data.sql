@@ -13,6 +13,7 @@ INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (4, '2022-04-27T
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (5, '2022-04-27T21:00:00', 2, 3);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (6, '2022-04-27T21:00:00', 3, 3);
 INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (7, '2022-04-18T13:45:00', 1, 2);
+INSERT INTO Screening(id, start_time, id_movie, id_room) VALUES (8, '2023-04-18T13:45:00', 3, 2);
 
 INSERT INTO Seat(id, row_num, seat_num, id_room) VALUES (1, 1, 1, 1);
 INSERT INTO Seat(id, row_num, seat_num, id_room) VALUES (2, 1, 2, 1);
