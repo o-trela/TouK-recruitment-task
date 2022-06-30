@@ -17,35 +17,35 @@ echo
 
 echo -e "\n${LCYAN}Same as above with different endpoint."
 echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
-echo -e "${LRED}Here screening_id=20, name=Touk, surname=Touk, seats={'300': 'adult', '301: 'child'}"
+echo -e "${LRED}Here screening_id=20, name=Touk, surname=Touk, seats={'300': 'ADULT', '301: 'CHILD'}"
 echo -e "${YELLOW}"
-curl -X POST "http://localhost:${PORT}/reservation/20?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"300": "adult", "301": "child"}' | sed $'s/,/\,\\n/g'
+curl -X POST "http://localhost:${PORT}/reservation/20?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"300": "ADULT", "301": "CHILD"}' | sed $'s/,/\,\\n/g'
 echo
 
 echo -e "\n${LCYAN}Names and surname are validated before they are send to the database.\nName can only be one word starting with capital letter (min size = 3). Surname may consist of two words beginning with a capital letter and separated with one whitespace (min size of each = 3). If validation fails, system retrives error respond body with 400 Http code."
 echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
-echo -e "${LRED}Here screening_id=20, name=TouK, surname=TouK, seats={'300': 'adult', '301: 'child'}"
+echo -e "${LRED}Here screening_id=20, name=TouK, surname=TouK, seats={'300': 'ADULT', '301: 'CHILD'}"
 echo -e "${YELLOW}"
-curl -X POST "http://localhost:${PORT}/reservation/20?name=TouK&surname=TouK" -H "Content-Type: application/json" -d '{"300": "adult", "301": "child"}' | sed $'s/,/\,\\n/g'
+curl -X POST "http://localhost:${PORT}/reservation/20?name=TouK&surname=TouK" -H "Content-Type: application/json" -d '{"300": "ADULT", "301": "CHILD"}' | sed $'s/,/\,\\n/g'
 echo
 
 echo -e "\n${LCYAN}If the screening has already taken place, you cannot book tickets for it (405 Http code)."
 echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
-echo -e "${LRED}Here screening_id=2, name=TouK, surname=TouK, seats={'152': 'adult', '153: 'child'}"
+echo -e "${LRED}Here screening_id=2, name=TouK, surname=TouK, seats={'152': 'ADULT', '153: 'CHILD'}"
 echo -e "${YELLOW}"
-curl -X POST "http://localhost:${PORT}/reservation/2?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"152": "adult", "153": "child"}' | sed $'s/,/\,\\n/g'
+curl -X POST "http://localhost:${PORT}/reservation/2?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"152": "ADULT", "153": "CHILD"}' | sed $'s/,/\,\\n/g'
 echo
 
 echo -e "\n${LCYAN}If chosen seat is already taken, system will retrive error respond body with 409 Http code. May differ, because of situation from the case above."
 echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
-echo -e "${LRED}Here screening_id=1, name=TouK, surname=TouK, seats={'55': 'adult', '54: 'child'}"
+echo -e "${LRED}Here screening_id=1, name=TouK, surname=TouK, seats={'55': 'ADULT', '54: 'CHILD'}"
 echo -e "${YELLOW}"
-curl -X POST "http://localhost:${PORT}/reservation/1?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"55": "adult", "54": "child"}' | sed $'s/,/\,\\n/g'
+curl -X POST "http://localhost:${PORT}/reservation/1?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"55": "ADULT", "54": "CHILD"}' | sed $'s/,/\,\\n/g'
 echo
 
 echo -e "\n${LCYAN}Client cannot choose set of seats with one empty seat between as well as leave one seat space between already taken seats and chosen ones (400 Http code)."
 echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
-echo -e "${LRED}Here screening_id=1, name=Touk, surname=Touk, seats={'26': 'adult', '24: 'child'}"
+echo -e "${LRED}Here screening_id=1, name=Touk, surname=Touk, seats={'26': 'ADULT', '24: 'CHILD'}"
 echo -e "${YELLOW}"
-curl -X POST "http://localhost:${PORT}/reservation/1?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"26": "adult", "24": "child"}' | sed $'s/,/\,\\n/g'
+curl -X POST "http://localhost:${PORT}/reservation/1?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"26": "ADULT", "24": "CHILD"}' | sed $'s/,/\,\\n/g'
 echo

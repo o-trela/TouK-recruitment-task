@@ -68,7 +68,7 @@ class SearchServiceTest {
 
     @Test
     void screeningNotFound() {
-        when(fakeScreeningRepository.findById(anyInt())).thenThrow(NoSuchElementException.class);
+        when(fakeScreeningRepository.findById(anyInt())).thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class, () -> cheatedSearchService.getSingleScreening(0));
     }

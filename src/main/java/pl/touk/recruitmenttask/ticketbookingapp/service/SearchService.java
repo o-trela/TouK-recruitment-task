@@ -42,15 +42,8 @@ public class SearchService {
     }
 
     public Screening getSingleScreening(int id) {
-        Screening pickedScreening;
-        try {
-            pickedScreening = screeningRepository.findById(id).orElseThrow();
-        }
-        catch (NoSuchElementException e) {
-            throw new ResourceNotFoundException("Screening Not Found");
-        }
-
-        return pickedScreening;
+        return screeningRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Screening Not Found"));
     }
 
     private LocalDateTime getEndOfTheDay(LocalDateTime dateTime) {

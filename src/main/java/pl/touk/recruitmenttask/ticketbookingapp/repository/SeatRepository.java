@@ -6,11 +6,12 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.Room;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Seat;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Integer> {
     List<Seat> findAllByIdIn(Integer[] ids);
-    Seat findById(int id);
-    Seat findByRoomAndRowNumAndSeatNum(Room room, int rowNum, int seatNum);
+    Optional<Seat> findById(int id);
+    Optional<Seat> findByRoomAndRowNumAndSeatNum(Room room, int rowNum, int seatNum);
     List<Seat> findAllByRowNumAndRoom(int rowNum, Room room);
 }

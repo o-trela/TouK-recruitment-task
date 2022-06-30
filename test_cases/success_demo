@@ -24,7 +24,7 @@ echo
 
 echo -e "\n${LCYAN}After choosing the screening user makes reservation by providing name, surname and chosen seats each with type. System retrives info about total cost of reservation and the expiry date of the payment."
 echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
-echo -e "${LRED}HERE screening_id=6, name=Touk, surname=Touk, seats={'300': 'adult', '301: 'child'}"
+echo -e "${LRED}HERE screening_id=6, name=Touk, surname=Touk, seats={'300': 'ADULT', '301: 'CHILD'}"
 echo -e "${YELLOW}"
-curl -X POST "http://localhost:${PORT}/reservation/6?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"300": "adult", "301": "child"}' | sed $'s/,/\,\\n/g'
+curl -X POST "http://localhost:${PORT}/reservation/6?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"300": "ADULT", "301": "CHILD"}' | sed $'s/,/\,\\n/g'
 echo

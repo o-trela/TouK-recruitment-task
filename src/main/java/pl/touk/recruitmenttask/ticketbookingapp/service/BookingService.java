@@ -25,13 +25,7 @@ public class BookingService {
     public Reservation makeReservation(int screeningId, String name, String surname, Map<Integer, TicketType> seatsType, LocalDateTime now) {
         Reservation reservation = new Reservation();
 
-        Screening screening;
-        try {
-            screening = searchService.getSingleScreening(screeningId);
-        }
-        catch (NoSuchElementException e) {
-            throw new ResourceNotFoundException("Screening Not Found");
-        }
+        Screening screening = searchService.getSingleScreening(screeningId);
 
         LocalDateTime startTime = screening.getStartTime();
         if (startTime
