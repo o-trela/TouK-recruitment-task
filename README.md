@@ -33,16 +33,25 @@ This REST API contains 4 endpoints:
 | `/screenings`                      | Retrieve info about all screenings.      |
 | `/screenings?start={start_time}`   | Retrieve info about all screenings starting after given time until the end of the day. |
 | `/screening/{screening_id}`        | Retrieve info about particular screening (title, room number, seats available). |
-| `/reservation/{screening_id}?name={name}&surname={surname}` | Make reservation on particular screening. Provide name and surname of person who is making reservation and pass seats through request body. |
+| `/reservation/{screening_id}` | Make reservation on particular screening. Provide name and surname of person who is making reservation and pass seats through request body. |
 
 **Request body for reservation endpoint:**
 ```properties
- {
+{
+  "name": "{name}",
+  "surname": "{surname}",
+  "seats": {
     "{seat_id}": "{ticket_type}",
     "{seat_id}": "{ticket_type}",
     (...)
- }
+  }
+}
 ```
+
+**Ticket types:** 
+- `ADULT`
+- `STUDENT`
+- `CHILD`
 
 ## Use case diagram
 
