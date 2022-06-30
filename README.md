@@ -15,9 +15,6 @@ This project is REST API which imitates ticket booking app for cinema and contai
 ## **Running the application locally**
 
 To run the application open the terminal in the directory in which you cloned the repository and enter the project folder.
-```shell
-cd ticketbookingapp/
-```
 Depending on the operating system you are working on choose appropriate command.
 - Windows:
 ```shell
