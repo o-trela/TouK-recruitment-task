@@ -1,5 +1,5 @@
-# TouK-recruitment-task
-Repository containing recruitment task from TouK for internship.
+# Ticket Booking App
+Repository containing cinema ticket booking application REST API which was created during recruitment for TouK.
 
 ## **Build With**
 
