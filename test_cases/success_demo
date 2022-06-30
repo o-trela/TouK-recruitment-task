@@ -1,0 +1,30 @@
+#!/bin/bash
+
+LCYAN='\033[1;36m'
+CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+LRED='\033[1;31m'
+NC='\033[0m'
+
+PORT="${1:-8080}"
+
+echo -e "\n${LCYAN}User is looking for a screening after 20:00 2022-04-27 until the end of the day."
+echo -e "${CYAN}Endpoint -> /screening?start={YYYY-MM-DDTHH:MM:SS}"
+echo -e "${LRED}Here start=2022-04-27T20:00:00"
+echo -e "${YELLOW}"
+curl -X POST "http://localhost:${PORT}/screenings?start=2022-04-27T20:00:00" | sed $'s/,/\,\\n/g'
+echo
+
+echo -e "\n${LCYAN}Picking particular screening gives us specific information about it. (Room number, seats availble)"
+echo -e "${CYAN}Endpoint -> /screening/{screening_id}${NC}"
+echo -e "${LRED}Here screening_id=6"
+echo -e "${YELLOW}"
+curl -X GET "http://localhost:${PORT}/screenings/6" | sed $'s/,/\,\\n/g'
+echo
+
+echo -e "\n${LCYAN}After choosing the screening user makes reservation by providing name, surname and chosen seats each with type. System retrives info about total cost of reservation and the expiry date of the payment."
+echo -e "${CYAN}Endpoint -> /reservation/{screening_id}?name={name}&surname={surname}"
+echo -e "${LRED}HERE screening_id=6, name=Touk, surname=Touk, seats={'300': 'ADULT', '301: 'CHILD'}"
+echo -e "${YELLOW}"
+curl -X POST "http://localhost:${PORT}/reservation/6?name=Touk&surname=Touk" -H "Content-Type: application/json" -d '{"300": "ADULT", "301": "CHILD"}' | sed $'s/,/\,\\n/g'
+echo
