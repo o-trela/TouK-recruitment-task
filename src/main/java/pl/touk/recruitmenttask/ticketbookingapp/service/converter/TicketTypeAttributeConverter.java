@@ -15,9 +15,9 @@ public class TicketTypeAttributeConverter implements AttributeConverter<TicketTy
 
         int finalValue;
         switch (attribute) {
-            case adult -> finalValue = 1;
-            case student -> finalValue = 2;
-            case child -> finalValue = 3;
+            case ADULT -> finalValue = 1;
+            case STUDENT -> finalValue = 2;
+            case CHILD -> finalValue = 3;
             default -> throw new IllegalArgumentException(attribute + "not supported.");
         }
 
@@ -31,9 +31,9 @@ public class TicketTypeAttributeConverter implements AttributeConverter<TicketTy
 
         TicketType finalValue;
         switch (dbData) {
-            case 1 -> finalValue = TicketType.adult;
-            case 2 -> finalValue = TicketType.student;
-            case 3 -> finalValue = TicketType.child;
+            case 1 -> finalValue = TicketType.ADULT;
+            case 2 -> finalValue = TicketType.STUDENT;
+            case 3 -> finalValue = TicketType.CHILD;
             default -> throw new IllegalArgumentException(dbData + "not supported.");
         }
 

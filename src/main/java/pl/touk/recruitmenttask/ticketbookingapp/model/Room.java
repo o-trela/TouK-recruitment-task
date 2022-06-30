@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Room {
 
     @Id
@@ -34,30 +35,4 @@ public class Room {
     )
     @JsonManagedReference
     private List<Seat> seat;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Room room = (Room) o;
-
-        return new EqualsBuilder()
-                .append(id, room.id)
-                .append(no_seats, room.no_seats)
-                .append(screening, room.screening)
-                .append(seat, room.seat)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(no_seats)
-                .append(screening)
-                .append(seat)
-                .toHashCode();
-    }
 }

@@ -7,6 +7,7 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.dto.SummaryDto;
 import pl.touk.recruitmenttask.ticketbookingapp.service.TicketCashier;
 import pl.touk.recruitmenttask.ticketbookingapp.service.properties.PropertiesConfig;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,10 +18,10 @@ public class SummaryDtoMapper {
         List<Ticket> tickets = reservation.getTicket();
         LocalDateTime now = LocalDateTime.now();
 
-        double total = 0;
+        BigDecimal total = BigDecimal.ZERO;
         for (Ticket ticket : tickets) {
-            double price = TicketCashier.checkTicketCost(ticket.getTicketType());
-            total += price;
+            BigDecimal price = TicketCashier.checkTicketCost(ticket.getTicketType());
+            total = total.add(price);
         }
 
         return new SummaryDto(total, now.plusMinutes(PropertiesConfig.expirationTimeMin));

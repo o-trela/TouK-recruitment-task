@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Ticket {
 
     @Id
@@ -38,32 +39,4 @@ public class Ticket {
     @JoinColumn(name = "id_screening")
     @JsonBackReference
     private Screening screening;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Ticket ticket = (Ticket) o;
-
-        return new EqualsBuilder()
-                .append(id, ticket.id)
-                .append(ticketType, ticket.ticketType)
-                .append(seat, ticket.seat)
-                .append(reservation, ticket.reservation)
-                .append(screening, ticket.screening)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(ticketType)
-                .append(seat)
-                .append(reservation)
-                .append(screening)
-                .toHashCode();
-    }
 }

@@ -58,7 +58,7 @@ class BookingServiceTest {
         when(fakeSeatService.ensureNoGapOccurs(any(), any())).thenReturn(true);
 
         Map<Integer, TicketType> seatsType = Map.of(
-                2, TicketType.adult
+                2, TicketType.ADULT
         );
 
         Reservation testReservation = cheatedBookingService.makeReservation(
@@ -71,7 +71,7 @@ class BookingServiceTest {
         assertNotNull(testReservation);
 
         Ticket correctTicket = Ticket.builder()
-                        .ticketType(TicketType.adult)
+                        .ticketType(TicketType.ADULT)
                         .reservation(testReservation)
                         .screening(testScreening)
                         .seat(TestData.seatList.get(1))
@@ -97,7 +97,7 @@ class BookingServiceTest {
         when(fakeSearchService.getSingleScreening(anyInt())).thenReturn(testScreening);
 
         Map<Integer, TicketType> seatsType = Map.of(
-                2, TicketType.adult
+                2, TicketType.ADULT
         );
 
         assertThrows(TooLateException.class, () -> cheatedBookingService.makeReservation(

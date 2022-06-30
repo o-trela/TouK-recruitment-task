@@ -50,7 +50,7 @@ class BookingControllerTest {
         when(fakeSurnameValidator.isValid(anyString())).thenReturn(true);
 
         Map<Integer, TicketType> seats = new HashMap<>();
-        seats.put(1, TicketType.adult);
+        seats.put(1, TicketType.ADULT);
 
         Map<String, Object> testContents = new HashMap<>();
         testContents.put("name", "Test");

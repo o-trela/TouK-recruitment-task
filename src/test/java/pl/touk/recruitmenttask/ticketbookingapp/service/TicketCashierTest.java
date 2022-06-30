@@ -10,9 +10,9 @@ class TicketCashierTest {
 
     @Test
     void checkTicketCost() {
-        assertEquals(PropertiesConfig.adultPrice, TicketCashier.checkTicketCost(TicketType.adult));
-        assertEquals(PropertiesConfig.studentPrice, TicketCashier.checkTicketCost(TicketType.student));
-        assertEquals(PropertiesConfig.childPrice, TicketCashier.checkTicketCost(TicketType.child));
+        assertEquals(PropertiesConfig.adultPrice, TicketCashier.checkTicketCost(TicketType.ADULT));
+        assertEquals(PropertiesConfig.studentPrice, TicketCashier.checkTicketCost(TicketType.STUDENT));
+        assertEquals(PropertiesConfig.childPrice, TicketCashier.checkTicketCost(TicketType.CHILD));
 
     }
 }

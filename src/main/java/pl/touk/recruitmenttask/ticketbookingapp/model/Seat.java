@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Seat {
 
     @Id
@@ -34,32 +35,4 @@ public class Seat {
     @JoinColumn(name = "id_room")
     @JsonBackReference
     private Room room;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Seat seat = (Seat) o;
-
-        return new EqualsBuilder()
-                .append(id, seat.id)
-                .append(rowNum, seat.rowNum)
-                .append(seatNum, seat.seatNum)
-                .append(ticket, seat.ticket)
-                .append(room, seat.room)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(rowNum)
-                .append(seatNum)
-                .append(ticket)
-                .append(room)
-                .toHashCode();
-    }
 }
