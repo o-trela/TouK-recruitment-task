@@ -62,17 +62,17 @@ public class BookingService {
             throw new BadRequestException("Not Allowed To Leave One Seat Between");
 
         List<Ticket> tickets = new ArrayList<>();
-        for (Seat seat : seatList) {
-            Ticket ticket = new Ticket();
-            TicketType ticketType = seatsType.get(seat.getId());
+        seatList.forEach(seat -> {
+                    Ticket ticket = new Ticket();
+                    TicketType ticketType = seatsType.get(seat.getId());
 
-            ticket.setTicketType(ticketType);
-            ticket.setReservation(reservation);
-            ticket.setScreening(screening);
-            ticket.setSeat(seat);
+                    ticket.setTicketType(ticketType);
+                    ticket.setReservation(reservation);
+                    ticket.setScreening(screening);
+                    ticket.setSeat(seat);
 
-            tickets.add(ticket);
-        }
+                    tickets.add(ticket);
+                });
 
         return tickets;
     }

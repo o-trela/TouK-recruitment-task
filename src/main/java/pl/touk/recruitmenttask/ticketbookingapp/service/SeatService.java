@@ -18,18 +18,17 @@ public class SeatService {
     private final SeatRepository seatRepository;
 
     public List<Seat> getSeatsByIds(Set<Integer> ids) {
-        Integer[] seatIds = ids.toArray(new Integer[0]);
-        return seatRepository.findAllByIdIn(seatIds);
+        return seatRepository.findAllByIdIn(ids);
     }
 
     public List<Seat> getReservedSeatsByScreening(Screening screening) {
         List<Seat> reservedSeats = new ArrayList<>();
 
         List<Ticket> tickets = ticketRepository.findByScreening(screening);
-        for (Ticket rs : tickets) {
-            Seat seat = rs.getSeat();
+        tickets.forEach(ticket -> {
+            Seat seat = ticket.getSeat();
             reservedSeats.add(seat);
-        }
+        });
 
         return reservedSeats;
     }
