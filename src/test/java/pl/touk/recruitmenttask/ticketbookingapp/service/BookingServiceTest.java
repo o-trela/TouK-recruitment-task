@@ -13,6 +13,7 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.Ticket;
 import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.ReservationRepository;
 import pl.touk.recruitmenttask.ticketbookingapp.repository.TicketRepository;
+import pl.touk.recruitmenttask.ticketbookingapp.service.properties.PropertiesConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ class BookingServiceTest {
     private SeatService fakeSeatService;
     @Mock
     private SearchService fakeSearchService;
+    @Mock
+    private PropertiesConfig fakePropertiesConfig;
 
     private BookingService cheatedBookingService;
 
@@ -41,7 +44,8 @@ class BookingServiceTest {
                 fakeReservationRepository,
                 fakeTicketRepository,
                 fakeSeatService,
-                fakeSearchService
+                fakeSearchService,
+                fakePropertiesConfig
         );
     }
 
@@ -95,6 +99,7 @@ class BookingServiceTest {
         String testSurname = "testSurname";
 
         when(fakeSearchService.getSingleScreening(anyInt())).thenReturn(testScreening);
+        when(fakePropertiesConfig.getExpirationTimeMin()).thenReturn(15L);
 
         Map<Integer, TicketType> seatsType = Map.of(
                 2, TicketType.ADULT

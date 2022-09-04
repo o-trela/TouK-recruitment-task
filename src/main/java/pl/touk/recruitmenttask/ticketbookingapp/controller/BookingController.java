@@ -11,7 +11,7 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ReservationDto;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.SummaryDto;
 import pl.touk.recruitmenttask.ticketbookingapp.service.BookingService;
-import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SummaryDtoMapper;
+import pl.touk.recruitmenttask.ticketbookingapp.controller.mapper.SummaryMapper;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -23,6 +23,7 @@ public class BookingController {
     private final BookingService bookingService;
     private final NameValidator nameValidator;
     private final SurnameValidator surnameValidator;
+    private final SummaryMapper summaryMapper;
 
     @PostMapping("/reservation/{screeningId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -45,7 +46,7 @@ public class BookingController {
                 LocalDateTime.now()
         );
 
-        return SummaryDtoMapper.mapToSummaryDto(reservation);
+        return summaryMapper.mapToSummaryDto(reservation);
     }
 
     private void validateSeats(Map<Integer, TicketType> seats) {

@@ -21,6 +21,7 @@ public class BookingService {
     private final TicketRepository ticketRepository;
     private final SeatService seatService;
     private final SearchService searchService;
+    private final PropertiesConfig propertiesConfig;
 
     public Reservation makeReservation(int screeningId, String name, String surname, Map<Integer, TicketType> seatsType, LocalDateTime now) {
         Reservation reservation = new Reservation();
@@ -29,7 +30,7 @@ public class BookingService {
 
         LocalDateTime startTime = screening.getStartTime();
         if (startTime
-                .minusMinutes(PropertiesConfig.expirationTimeMin)
+                .minusMinutes(propertiesConfig.getExpirationTimeMin())
                 .isBefore(now)) {
             throw new TooLateException("It Is Too Late To Make A Reservation");
         }

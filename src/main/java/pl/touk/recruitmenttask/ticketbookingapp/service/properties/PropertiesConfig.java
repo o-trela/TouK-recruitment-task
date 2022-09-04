@@ -1,13 +1,20 @@
 package pl.touk.recruitmenttask.ticketbookingapp.service.properties;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
 import java.math.BigDecimal;
 
+@Getter
+@Setter
+@Configuration
+@ConfigurationProperties(prefix = "config")
 public class PropertiesConfig {
-    public final static BigDecimal adultPrice = new BigDecimal("25");
-    public final static BigDecimal studentPrice = new BigDecimal("18");
-    public final static BigDecimal childPrice = new BigDecimal("12.5");
+    private BigDecimal adultPrice;
+    private BigDecimal studentPrice;
+    private BigDecimal childPrice;
 
-    public final static long expirationTimeMin = 15;
-
-    private PropertiesConfig() {}
+    public long expirationTimeMin;
 }

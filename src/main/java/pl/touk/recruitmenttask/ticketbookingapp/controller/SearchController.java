@@ -1,7 +1,6 @@
 package pl.touk.recruitmenttask.ticketbookingapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import pl.touk.recruitmenttask.ticketbookingapp.model.Room;
@@ -10,14 +9,12 @@ import pl.touk.recruitmenttask.ticketbookingapp.model.Seat;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningInfoDto;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.ScreeningDto;
 import pl.touk.recruitmenttask.ticketbookingapp.model.dto.SeatDto;
-import pl.touk.recruitmenttask.ticketbookingapp.service.BookingService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.RoomService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.SearchService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.SeatService;
 import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.ScreeningDtoMapper;
 import pl.touk.recruitmenttask.ticketbookingapp.service.mapper.SeatDtoMapper;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 

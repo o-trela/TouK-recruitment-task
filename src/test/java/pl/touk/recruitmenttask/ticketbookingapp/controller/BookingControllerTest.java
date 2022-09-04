@@ -17,7 +17,11 @@ import pl.touk.recruitmenttask.ticketbookingapp.exception.ResourceNotFoundExcept
 import pl.touk.recruitmenttask.ticketbookingapp.exception.TooLateException;
 import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
 import pl.touk.recruitmenttask.ticketbookingapp.service.BookingService;
+import pl.touk.recruitmenttask.ticketbookingapp.service.TicketCashier;
+import pl.touk.recruitmenttask.ticketbookingapp.controller.mapper.SummaryMapper;
+import pl.touk.recruitmenttask.ticketbookingapp.service.properties.PropertiesConfig;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,13 +45,25 @@ class BookingControllerTest {
     @MockBean
     private SurnameValidator fakeSurnameValidator;
 
+    @MockBean
+    private SummaryMapper fakeSummaryMapper;
+
     private String requestJson;
 
     @BeforeEach
     public void setup() throws JsonProcessingException {
+        PropertiesConfig fakePropertiesConfig = new PropertiesConfig();
+        fakePropertiesConfig.setAdultPrice(BigDecimal.valueOf(1));
+        fakePropertiesConfig.setStudentPrice(BigDecimal.valueOf(2));
+        fakePropertiesConfig.setChildPrice(BigDecimal.valueOf(3));
+
+        TicketCashier fakeTicketCashier = new TicketCashier(fakePropertiesConfig);
+        SummaryMapper workingSummaryMapper = new SummaryMapper(fakePropertiesConfig, fakeTicketCashier);
+
         when(fakeBookingService.makeReservation(anyInt(), anyString(), anyString(), anyMap(), any())).thenReturn(TestData.reservation);
         when(fakeNameValidator.isValid(anyString())).thenReturn(true);
         when(fakeSurnameValidator.isValid(anyString())).thenReturn(true);
+        when(fakeSummaryMapper.mapToSummaryDto(any())).thenReturn(workingSummaryMapper.mapToSummaryDto(TestData.reservation));
 
         Map<Integer, TicketType> seats = new HashMap<>();
         seats.put(1, TicketType.ADULT);

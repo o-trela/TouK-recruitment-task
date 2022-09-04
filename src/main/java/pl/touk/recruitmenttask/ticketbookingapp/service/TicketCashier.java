@@ -1,24 +1,28 @@
 package pl.touk.recruitmenttask.ticketbookingapp.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.touk.recruitmenttask.ticketbookingapp.model.TicketType;
 import pl.touk.recruitmenttask.ticketbookingapp.service.properties.PropertiesConfig;
 
 import java.math.BigDecimal;
 
+@Component
+@RequiredArgsConstructor
 public class TicketCashier {
-    private TicketCashier() {}
+    public final PropertiesConfig propertiesConfig;
 
-    public static BigDecimal checkTicketCost(TicketType ticketType) {
+    public BigDecimal checkTicketCost(TicketType ticketType) {
         if (ticketType == null) {
             return BigDecimal.ZERO;
         }
 
         BigDecimal price;
         switch (ticketType) {
-            case ADULT -> price = PropertiesConfig.adultPrice;
-            case STUDENT -> price = PropertiesConfig.studentPrice;
-            case CHILD -> price = PropertiesConfig.childPrice;
-            default -> throw new IllegalArgumentException(ticketType + "not supported.");
+            case ADULT -> price = propertiesConfig.getAdultPrice();
+            case STUDENT -> price = propertiesConfig.getStudentPrice();
+            case CHILD -> price = propertiesConfig.getChildPrice();
+            default -> throw new IllegalArgumentException(ticketType + " not supported.");
         }
 
         return price;

@@ -126,4 +126,5 @@ Access to database is gained with the help of Spring JPA.
 ![Database ER diagram (crow's foot)](https://user-images.githubusercontent.com/79324178/165573650-0a2659f7-132f-4f98-b126-fe795f6f2b9a.jpeg)
 
 ## **Notes**
-Test data is automatically initialized to the system and may expire over the time.
+- Test data is automatically initialized to the system and may expire over the time.
+- test_cases are not valid for this version.
